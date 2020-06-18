@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:acs-crm-salesforce-system-api="http://www.mulesoft.org/schema/mule/acs-crm-salesforce-system-api"
+	xmlns:customlogger="http://www.mulesoft.org/schema/mule/customlogger"
+	xmlns:bluedoor-registry-system-api="http://www.mulesoft.org/schema/mule/bluedoor-registry-system-api" xmlns:acs-idm-system-api="http://www.mulesoft.org/schema/mule/acs-idm-system-api" xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:dynamics="http://www.mulesoft.org/schema/mule/dynamics" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/dynamics http://www.mulesoft.org/schema/mule/dynamics/current/mule-dynamics.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	 <http:listener-config name="api-httpListenerConfig" doc:name="HTTP Listener config"> 
+        <http:listener-connection host="${http.listener.host}" port="${http.listener.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="jks" path="ssl/addyoursslhere.jks" alias="serverkey" keyPassword="addyourpasshere" password="addyourpasswordhere" />
+			</tls:context>
+		</http:listener-connection>
+    </http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="28f8c13b-ca98-4cea-bec3-4b8ee53324dd" file="properties/local.properties" />
+	<http:request-config name="HTTP_Request_configuration_Azure_Graph_API" doc:name="HTTP Request configuration" doc:id="a86d152c-4c91-422a-bd1b-376ed2535207" basePath="${azure.graph.api.base.path}">
+		<http:request-connection protocol="HTTPS" host="${azure.graph.api.host}" port="${azure.graph.api.port}" />
+	</http:request-config>
+	
+	<http:request-config name="HTTP_Request_configuration_Azure_Token" doc:name="HTTP Request configuration" doc:id="7d504b58-46c3-43a1-944a-a78a86024f3d" >
+		<http:request-connection protocol="HTTPS" host="${azure.access.token.host}" port="${azure.access.token.port}" />
+	</http:request-config>
+</mule>
+ 

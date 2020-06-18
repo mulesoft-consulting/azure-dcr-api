@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <apikit:config name="azure-dcr-api-config" raml="azure-dcr-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="azure-dcr-api-main">
+        <http:listener config-ref="api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+            </http:error-response>
+        </http:listener> 
+        <logger level="INFO" doc:name="Capture Request Payload" doc:id="129643bd-f953-4893-8b5a-261ba12e3ebb" message="#[payload]"/>
+		<apikit:router config-ref="azure-dcr-api-config" />
+        <logger level="INFO" doc:name="Capture Response Payload" doc:id="b140f392-8c9d-455e-854c-f8a5eb08bb2a" message="#[payload]"/>
+		<error-handler ref="sync-error-handler-with-propogate-option" /> 
+    </flow>
+    <flow name="delete:\register\(client_id):azure-dcr-api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="client_id">attributes.uriParams.client_id</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <logger level="INFO" message="delete:\register\(client_id):azure-dcr-api-config" />
+    </flow>
+    <flow name="patch:\register\(client_id):application\json:azure-dcr-api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="fe92c805-7a5f-4b26-b839-51d39fdf4fe8">
+            <ee:variables>
+                <ee:set-variable variableName="client_id"><![CDATA[attributes.uriParams.client_id]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <logger level="INFO" message="patch:\register\(client_id):application\json:azure-dcr-api-config" />
+    </flow>
+    <flow name="get:\.well-known\jwks.json:azure-dcr-api-config">
+        <logger level="INFO" message="get:\.well-known\jwks.json:azure-dcr-api-config" />
+    </flow>
+    <flow name="get:\.well-known\openid-configuration:azure-dcr-api-config">
+        <logger level="INFO" message="get:\.well-known\openid-configuration:azure-dcr-api-config" />
+    </flow>
+    <flow name="get:\userinfo:azure-dcr-api-config">
+        <logger level="INFO" message="get:\userinfo:azure-dcr-api-config" />
+    </flow>
+    <flow name="get:\register\(client_id):azure-dcr-api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+            <ee:variables>
+                <ee:set-variable variableName="client_id">attributes.uriParams.client_id</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <logger level="INFO" message="get:\register\(client_id):azure-dcr-api-config" />
+    </flow>
+    <flow name="post:\register:application\json:azure-dcr-api-config">
+        <logger level="INFO" message="post:\register:application\json:azure-dcr-api-config" />
+		<flow-ref doc:name="azure:\create-app-key" doc:id="acda1dc0-af45-4bf6-87c1-bab036c43113" name="azure:\create-app-key"/>
+    </flow>
+    <flow name="post:\register\(client_id)\renew_secret:azure-dcr-api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="42b8c8fd-d415-4cde-b3ed-a0fa29e4d47a">
+            <ee:variables>
+                <ee:set-variable variableName="client_id"><![CDATA[attributes.uriParams.client_id]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <logger level="INFO" message="post:\register\(client_id)\renew_secret:azure-dcr-api-config" />
+    </flow>
+    <flow name="post:\userinfo:application\x-www-form-urlencoded:azure-dcr-api-config">
+        <logger level="INFO" message="post:\userinfo:application\x-www-form-urlencoded:azure-dcr-api-config" />
+    </flow>
+     <flow name="get:\authorize:azure-dcr-api-config"> 
+		<logger level="INFO" doc:name="Logger" doc:id="e0b2a4ad-d3fd-438c-a000-6aaee27afa1e" message="Authorize"/>
+		<set-variable value='#[(vars.outboundHeaders default {}) ++ {"Location":"https://login.microsoftonline.com/krishnakmisragmail.onmicrosoft.com
+/oauth2/authorize?client_id=03079ae5-d9b5-48fd-bf3e-696916b8bdb7&amp;response_type=code&amp;redirect_uri=http%3A%2F%2Flocalhost:8081%2F&amp;response_mode=query&amp;state=12345"}]' doc:name="Set Variable" doc:id="ce4fbbbc-6574-4e98-9b0c-eec602376548" variableName="outboundHeaders"/>
+        <set-variable value="302" doc:name="Set Variable" doc:id="7a111ea3-9865-4015-80da-1789f1c02ae7" variableName="httpStatus" />
+    </flow>
+    <flow name="post:\token:application\x-www-form-urlencoded:azure-dcr-api-config">
+        <!-- <flow-ref doc:name="get-network-profile" doc:id="47a6ecd5-3538-415d-88c6-662544368c41" name="get-network-profile"/> -->
+		<logger level="INFO" doc:name="Logger" doc:id="e081e0f3-fe7d-4a00-bf14-4a4e45a30857" message="start" />
+		<http:request config-ref="HTTP_Request_configuration_Azure_Token" method="#[attributes.method]" followRedirects="true" path="${azure.access.token.path}">
+			<http:response-validator>
+                <http:success-status-code-validator values="0..599" />
+            </http:response-validator>
+        </http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="bbc4563a-f679-4300-ad5b-c75ae5075158" message="end"/>
+    </flow>
+     <flow name="post:\introspect:azure-dcr-api-config">
+        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="0709f2c0-bb21-482c-987c-1775aef24337">
+            <ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "active" : true,
+    "token_type" : "Bearer",
+    "scope" : "openid profile",
+    "client_id" : "a9VpZDRCeFh3Nkk2VdYa",
+    "username" : "john.doe@example.com",
+    "exp" : 1451606400,
+    "iat" : 1451602800,
+    "sub" : "john.doe@example.com",
+    "aud" : "https://azure",
+    "iss" : "https://azure",
+    "jti" : "AT.7P4KlczBYVcWLkxduEuKeZfeiNYkZIC9uGJ28Cc-YaI",
+    "uid" : "00uid4BxXw6I6TV4m0g3"
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+            </ee:variables>
+        </ee:transform>
+		<logger level="INFO" message="post:\register\(client_id)\renew_secret:azure-dcr-api-config" />
+    </flow>
+     <flow name="get:\healthcheck:azure-dcr-api-config">
+        <logger level="INFO" message="Health Check OK" doc:name="Health Check OK"/>
+		<ee:transform doc:name="Transform Message" doc:id="0b38011b-f14e-4b7f-a8f8-d11bb525a6ea" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	status: "OK"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+    </flow>
+</mule>

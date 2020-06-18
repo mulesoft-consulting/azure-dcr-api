@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:customlogger="http://www.mulesoft.org/schema/mule/customlogger" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/customlogger http://www.mulesoft.org/schema/mule/customlogger/current/mule-customlogger.xsd">
+	<error-handler name="sync-error-handler-with-propogate-option" doc:id="06498b21-1e75-4090-8e11-d9c61ef2b71a" >
+		<on-error-propagate type="APIKIT:BAD_REQUEST">
+               <set-variable value="400" doc:name="Set Variable" doc:id="bdf824f6-a602-4fb5-a124-02a7c6da873e" variableName="httpStatus"/>
+			<flow-ref name="error-handling:\process-exception"  doc:id="4bffd545-1928-4929-ac41-2557b61a1b23" doc:name="error-handling:\process-exception" />
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <set-variable value="404" doc:name="Set Variable" doc:id="04759077-a3d8-4058-beaf-5eaaab7dc367" variableName="httpStatus"/>
+				<flow-ref name="error-handling:\process-exception"  doc:id="1196b895-d0ed-4cbd-9eb2-4ce3f5b33762" doc:name="error-handling:\process-exception" />
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+               <set-variable value="405" doc:name="Set Variable" doc:id="f89779a7-6bbe-442e-8cc8-08b9e5fcadec" variableName="httpStatus"/>
+               <flow-ref name="error-handling:\process-exception"  doc:id="3e6b53c7-c3ae-40b9-bf97-bff260268b7e" doc:name="error-handling:\process-exception" />
+            </on-error-propagate> 
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+               <flow-ref name="error-handling:\process-exception"  doc:id="e7114297-c868-4108-9756-ef48b6da5ef9" doc:name="error-handling:\process-exception" />
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <set-variable value="404" doc:name="Set Variable" doc:id="b99f2a39-6ae4-48c8-baf6-03d886487f01" variableName="httpStatus"/>
+               <flow-ref name="error-handling:\process-exception"  doc:id="610412a3-fc47-4408-bf88-a9cccbcb497e" doc:name="error-handling:\process-exception" />
+            </on-error-propagate> 
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <set-variable value="501" doc:name="Set Variable" doc:id="a66d8b18-7cef-4e54-b20e-5fb3e4d270be" variableName="httpStatus"/>
+               <flow-ref name="error-handling:\process-exception"  doc:id="466383d5-cdd8-40bc-9970-aad650a4e020" doc:name="error-handling:\process-exception" />
+            </on-error-propagate>
+             <on-error-propagate type="HTTP:BAD_REQUEST" enableNotifications="true" logException="true">
+               <set-variable value="400" doc:name="Set Variable" doc:id="6ab21f0d-2bcb-40d5-a18c-88d410d1c6e8" variableName="httpStatus"/>
+               <flow-ref name="error-handling:\process-exception"  doc:id="54c7d01b-b2c4-4c77-a83c-6d2a81a90fb0" doc:name="error-handling:\process-exception" />
+            </on-error-propagate>
+             <on-error-propagate type="HTTP:FORBIDDEN" enableNotifications="true" logException="true">
+               <set-variable value="403" doc:name="Set Variable" doc:id="312f6277-1596-48ea-9b63-24f6a52ff00f" variableName="httpStatus" mimeType="application/java"/>
+               <flow-ref name="error-handling:\process-exception"  doc:id="b8075076-ba2c-49ef-b6ee-ffbdb929dde9" doc:name="error-handling:\process-exception" />
+            </on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate(Technical)" doc:id="e5bd6b18-8f5b-44ba-bfe2-077a44cea36a" type="HTTP:CONNECTIVITY, HTTP:SERVICE_UNAVAILABLE, HTTP:TIMEOUT, STREAM_MAXIMUM_SIZE_EXCEEDED">
+			<logger level="INFO" doc:name="Logger" doc:id="1ebbd32f-525b-47ea-9a21-60cfae494b2a" message="Technical Exception #[error.description]"/>
+			<flow-ref doc:name="error-handling:\process-exception" doc:id="745753ad-ee7b-4d4b-929e-fb947bd44299" name="error-handling:\process-exception"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate(Business)" doc:id="4785a4e6-6275-4aae-b372-9590b3be6ad7" type="HTTP:FORBIDDEN, HTTP:METHOD_NOT_ALLOWED, HTTP:NOT_ACCEPTABLE, HTTP:SECURITY, HTTP:UNAUTHORIZED, HTTP:UNSUPPORTED_MEDIA_TYPE">
+			<logger level="INFO" doc:name="Logger" doc:id="71f369b6-b34c-4024-bf18-4f1d849f5d3b" message="Business Exception #[error.errorType]"/>
+			<set-variable value="403" doc:name="Set Variable" doc:id="0fc7ce19-8d3a-480c-8926-952aa10a920a" variableName="httpStatus" mimeType="application/java"/>
+			<flow-ref doc:name="error-handling:\process-exception" doc:id="a042614d-80db-436a-9c51-eec539bbff96" name="error-handling:\process-exception"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate(Business)" doc:id="b6c17e7b-9725-493b-975c-396ccb326f2c" type="HTTP:NOT_FOUND">
+			<set-variable value="404" doc:name="Set Variable" doc:id="804a347e-98a3-4393-beda-2e32a29ef112" variableName="httpStatus"/>
+			<flow-ref doc:name="error-handling:\process-exception" doc:id="d5f1ad17-517f-408c-a2fc-e47d9c0026ff" name="error-handling:\process-exception"/>
+		</on-error-propagate> 
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate(Generic/All Other Types)" doc:id="f94f5b3a-67f6-4a73-b598-be13dd8235bc" type="ANY">
+			<flow-ref doc:name="error-handling:\process-exception" doc:id="b62b8fc8-fd8e-42a6-8796-461a073ff1a5" name="error-handling:\process-exception" />
+		</on-error-propagate>  
+	</error-handler>
+	
+	<error-handler name="async-error-handler-with-propogate-option" doc:id="11bd779a-561d-4f65-bfcf-fd486e0a47e7" >
+		
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate(Technical)" doc:id="31f485ed-57b3-4615-be12-e333a68b1981" type="HTTP:CONNECTIVITY, HTTP:INTERNAL_SERVER_ERROR, HTTP:RETRY_EXHAUSTED, HTTP:SERVICE_UNAVAILABLE, HTTP:TIMEOUT, HTTP:TOO_MANY_REQUESTS">
+			<set-variable value="true" variableName="isAsync" />
+			<set-variable value="404" doc:name="Set Variable" doc:id="a5bc89dd-33a9-4f12-9c0d-90049187bc42" variableName="httpStatus"/>
+			<flow-ref doc:name="error-handling:\process-exception" doc:id="8014b076-258f-4919-8f68-47372d7c879f" name="error-handling:\process-exception"/>
+		</on-error-propagate> 
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate(Business)" doc:id="00a693e8-114f-4576-9528-4f48d2fd172f" type="HTTP:BAD_REQUEST, HTTP:CLIENT_SECURITY, HTTP:FORBIDDEN, HTTP:METHOD_NOT_ALLOWED, HTTP:NOT_ACCEPTABLE, HTTP:NOT_FOUND, HTTP:PARSING, HTTP:SECURITY, HTTP:UNAUTHORIZED, HTTP:UNSUPPORTED_MEDIA_TYPE">
+			<set-variable value="true" variableName="isAsync" />
+			<set-variable value="404" doc:name="Set Variable" doc:id="c4e569a3-6b5b-40fe-9062-6eda3230ddbd" variableName="httpStatus"/>
+			<ee:transform doc:name="Transform Message" doc:id="1cec461e-f1ac-4c72-9a82-321695b1a6dd" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+vars.originalPayload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="error-handling:\process-exception" doc:id="96b26581-3c82-421d-be14-6855f419461d" name="error-handling:\process-exception"/>
+		</on-error-propagate> 
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate(Generic/All Other Types)" doc:id="d001e980-f164-4cf3-b11f-22f2dc561591" type="ANY">
+			<set-variable value="true" variableName="isAsync" />
+			<flow-ref doc:name="error-handling:\process-exception" doc:id="e3463393-f651-4d3a-9f41-e0e99b5c851f" name="error-handling:\process-exception" />
+		</on-error-propagate>  
+	</error-handler>
+	<sub-flow name="error-handling:\process-exception" doc:id="f5258220-d25e-46be-99de-5e8b2b4e0646" >
+		<ee:transform doc:name="Transform Message" doc:id="9b0eb08b-dfd9-4da2-a55a-8438114b34be">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="customErrorObject"><![CDATA[%dw 2.0
+output application/json
+---
+error.exception]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="c2bb44d7-faaa-4584-8f23-9a5d096ec8ea" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var errorCodeFromSource = vars.customErrorObject.errorMessage.payload.errorCode
+var errorMessageFromSource = vars.customErrorObject.errorMessage.payload.message
+var errorMessageFromMule = vars.customErrorObject.localizedMessage
+---
+{
+
+ correlationId: correlationId,
+ message: if(errorMessageFromSource != null) errorMessageFromSource else errorMessageFromMule,
+ sErrorCode: if(errorCodeFromSource != null) errorCodeFromSource else 'NA',
+ mErrorCode: error.errorType.identifier
+ 
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+			</ee:variables>
+		</ee:transform>
+		<set-variable value="true" doc:name="Set Variable" doc:id="125e44e4-6bed-406e-93e5-394137ed43d9" variableName="isError"/>
+	</sub-flow>
+	<error-handler name="global-error-handler" doc:id="52edfa02-1be3-4429-82da-59da68d61d6d" >
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="122179e3-5f85-44ba-8fc4-c3c5bf7495e0" type="ANY">
+			<ee:transform doc:name="Transform Message" doc:id="e88eace0-5fb0-4c8d-b8dc-33922e6ca499" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-continue>
+	</error-handler>
+</mule>  

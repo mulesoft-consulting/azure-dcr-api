@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="azure:\create-app-key" doc:id="9ae023d5-4ba4-4784-9581-360981c9fd27" >
+		<logger level="INFO" doc:name="Azure App Key Creation Started" doc:id="cb522f7f-9bf2-4d53-b8c1-54097a4d9850" message="Azure App Key Creation Started"/>
+		<set-variable value="#[payload]" doc:name="Capture Original Payload" doc:id="a4d7d56f-db6b-4337-90fc-35903059532f" variableName="originalPayload"/>
+		<http:request method="POST" doc:name="Get Azure AD Access Token" doc:id="a2037bb2-78fc-4fee-b4eb-f79e03773bc5" target="accessTokenFromAzure" targetValue="#[payload.access_token]" path="${azure.access.token.path}" config-ref="HTTP_Request_configuration_Azure_Token">
+			<http:body><![CDATA[#[%dw 2.0
+			output application/x-www-form-urlencoded
+			---
+	
+	{
+	grant_type: "client_credentials", 
+	scope : "",
+	client_id : p('azure.access.token.client.id'),
+	client_secret : p('azure.access.token.client.secret')
+	
+	
+}]]]></http:body>
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"Content-Type" : "application/x-www-form-urlencoded"
+}]]]></http:headers>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="a621c3eb-4b50-43e3-9e1f-b18b9c734fe2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+   
+   "displayName" : vars.originalPayload.client_name,
+   "replyUrls": vars.originalPayload.redirect_uris
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="Create App" doc:id="b830a7ad-c004-4839-9c92-0c6414566af3" config-ref="HTTP_Request_configuration_Azure_Graph_API" target="appCreationResponse" path="${azure.graph.api.app.path}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : "Bearer " ++ vars.accessTokenFromAzure,
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="347e17ad-59a8-4646-b9b0-b740fd680651" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+"passwordCredential":{
+"startDate": "2020-01-12T23:43:35.041Z",
+"endDate":"2299-12-30T13:00:00.000Z"
+}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="Create App Key" doc:id="d888b6e1-8112-460e-a44f-bd7846d69bfc" config-ref="HTTP_Request_configuration_Azure_Graph_API" path="#[p('azure.graph.api.password.path') replace '{applicationId}' with vars.appCreationResponse.objectId]">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"Authorization" : "Bearer " ++ vars.accessTokenFromAzure,
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="20605e55-a62d-4dae-beff-d05b24270319">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "logo_uri": "",
+  "grant_types": [
+    ""
+  ],
+  "request_object_signing_alg": "",
+  "client_name": vars.originalPayload.client_name,
+  "registration_access_token": "",
+  "id_token_signed_response_alg": "",
+  "token_endpoint_auth_method": "",
+  "software_statement": "",
+  "default_max_age": 0,
+  "request_object_encryption_alg": "",
+  "sector_identifier_uri": "",
+  "scope": [
+    ""
+  ],
+  "client_secret": payload.value[0].value,
+  "registration_client_uri": "",
+  "client_id_issued_at": "",
+  "client_secret_expires_at": 0,
+  "request_object_encryption_enc": "",
+  "token_endpoint_auth_signing_alg": "",
+  "id_token_encrypted_response_alg": "",
+  "client_id": vars.appCreationResponse.appId,
+  "initiate_login_uri": "",
+  "tos_uri": "",
+  "response_types": [
+    ""
+  ],
+  "subject_type": "",
+  "userinfo_encrypted_response_alg": "",
+  "software_version": "",
+  "client_uri": "",
+  "request_uris": [
+    ""
+  ],
+  "require_auth_time": false,
+  "contacts": [
+    ""
+  ],
+  "application_type": "",
+  "default_acr_values": [
+    ""
+  ],
+  "userinfo_encrypted_response_enc": "",
+  "jwks": {
+    "keys": [
+      {
+        "kty": "",
+        "use": "",
+        "key_ops": "",
+        "alg": "",
+        "kid": "",
+        "x5u": "",
+        "x5c": "",
+        "x5t": "",
+        "x5t#S256": ""
+      }
+    ]
+  },
+  "userinfo_signed_response_alg": "",
+  "software_id": "",
+  "redirect_uris": [
+    ""
+  ],
+  "id_token_encrypted_response_enc": "",
+  "policy_uri": "",
+  "jwks_uri": ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Azure App Key Creation Completed" doc:id="723af250-ec46-4ac6-b3b5-85185808d8a9" message="Azure App Key Creation Completed"/>
+	</sub-flow>
+</mule>

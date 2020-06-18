@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:customlogger="http://www.mulesoft.org/schema/mule/customlogger"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:dynamics="http://www.mulesoft.org/schema/mule/dynamics" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/dynamics http://www.mulesoft.org/schema/mule/dynamics/current/mule-dynamics.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/customlogger http://www.mulesoft.org/schema/mule/customlogger/current/mule-customlogger.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="common:\set-generic-info-message" doc:id="b047ee31-86b8-4c36-a2df-cfd6ffe0adf9" >
+		<ee:transform doc:name="Transform Message" doc:id="67bce95e-a6e2-4d96-891d-c4ad57aa6599" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	correlationId: correlationId,
+	message: "The request has been completed successfully"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<flow name="commonFlow" doc:id="53bef295-0b34-4935-b620-f7355117d4ee" >
+		<scheduler doc:name="Scheduler" doc:id="889a8a83-e17a-4146-9c3d-0175c34013b5" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="20" timeUnit="SECONDS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<http:request method="GET" doc:name="Request" doc:id="69650e87-40c1-4ee0-a2a9-e86726cbe280" url="https://azure-dcr-api.au-s1.cloudhub.io/api/healthcheck">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+		</http:request>
+	</flow>
+</mule>
