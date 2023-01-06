@@ -1,0 +1,1239 @@
+#%RAML 1.0
+title: Azure DCR API - Access Management - OpenID Connect API
+description: MuleSoft Azure DCR API - Access Management - OpenID Connect API. Defines The OpenID Connect Endpoints.
+version: v1
+(oas-info):
+  contact:
+    email: krishna.misra@mulesoft.com
+annotationTypes:
+  oas-info:
+    properties:
+      termsOfService?: string
+      contact?:
+        properties:
+          name?: string
+          url?: string
+          email?: string
+      license?:
+        properties:
+          name?: string
+          url?: string
+    allowedTargets: API
+  oas-summary:
+    type: string
+    allowedTargets: Method
+  oas-tags:
+    type: 'string[]'
+    allowedTargets: Method
+  oas-body-name:
+    type: string
+    allowedTargets: TypeDeclaration
+  amf-serverDescription:
+    type: any
+  amf-exclusiveMinimum:
+    type: any
+  amf-binding:
+    type: any
+  amf-pattern:
+    type: any
+  amf-payloads:
+    type: any
+  amf-exclusiveMaximum:
+    type: any
+  amf-consumes:
+    type: any
+  amf-additionalProperties:
+    type: any
+  amf-or:
+    type: any
+  amf-url:
+    type: any
+  amf-externalDocs:
+    type: any
+  amf-flow:
+    type: any
+  amf-oasDeprecated:
+    type: any
+  amf-contact:
+    type: any
+  amf-multipleOf:
+    type: any
+  amf-xor:
+    type: any
+  amf-not:
+    type: any
+  amf-produces:
+    type: any
+  amf-format:
+    type: any
+  amf-license:
+    type: any
+  amf-summary:
+    type: any
+  amf-responses:
+    type: any
+  amf-maximum:
+    type: any
+  amf-tags:
+    type: any
+  amf-dependencies:
+    type: any
+  amf-readOnly:
+    type: any
+  amf-tuple:
+    type: any
+  amf-examples:
+    type: any
+  amf-collectionFormat:
+    type: any
+  amf-termsOfService:
+    type: any
+  amf-servers:
+    type: any
+  amf-xone:
+    type: any
+  amf-defaultResponse:
+    type: any
+  amf-baseUriParameters:
+    type: any
+  amf-parameters:
+    type: any
+  amf-minimum:
+    type: any
+  amf-recursive:
+    type: any
+  amf-and:
+    type: any
+protocols:
+  - HTTPS
+baseUri: 'https://azure-dcr-api.au-s1.cloudhub.io/api/'
+securitySchemes:
+  client_auth:
+    description: 'Base64(clientId:clientSecret)'
+    type: Basic Authentication
+  ApiKeyAuth:
+    type: x-apiKey
+    description: Enter your registered API Key in the header.
+    describedBy:
+      headers:
+        apikey?:
+          type: any
+types:
+  OpenIDProviderMetadataResponse:
+    type: object
+    properties:
+      issuer:
+        description: REQUIRED. URL using the https scheme with no query or fragment component that the OP asserts as its Issuer Identifier
+        type: string
+      authorization_endpoint:
+        description: REQUIRED. URL of the OP's OAuth 2.0 Authorization Endpoint
+        type: string
+      token_endpoint:
+        description: URL of the OP's OAuth 2.0 Token Endpoint
+        type: string
+      userinfo_endpoint:
+        description: RECOMMENDED. URL of the OP's UserInfo Endpoint
+        type: string
+      jwks_uri:
+        description: 'REQUIRED. URL of the OP''s JSON Web Key Set [JWK] document.'
+        type: string
+      registration_endpoint:
+        description: RECOMMENDED. URL of the OP's Dynamic Client Registration Endpoint
+        type: string
+      scopes_supported:
+        description: 'RECOMMENDED. JSON array containing a list of the OAuth 2.0 [RFC6749] scope values that this server supports'
+        type: string
+      response_types_supported:
+        description: REQUIRED. JSON array containing a list of the OAuth 2.0 response_type values that this OP supports
+        type: string
+      response_modes_supported:
+        description: OPTIONAL. JSON array containing a list of the OAuth 2.0 response_mode values that this OP supports
+        type: string
+      grant_types_supported:
+        description: OPTIONAL. JSON array containing a list of the OAuth 2.0 Grant Type values that this OP supports
+        type: string
+      acr_values_supported:
+        description: OPTIONAL. JSON array containing a list of the Authentication Context Class References that this OP supports
+        type: string
+      subject_types_supported:
+        description: REQUIRED. JSON array containing a list of the Subject Identifier types that this OP supports
+        type: string
+      id_token_signing_alg_values_supported:
+        description: REQUIRED. JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT
+        type: string
+      id_token_encryption_alg_values_supported:
+        description: OPTIONAL. JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT
+        type: string
+      id_token_encryption_enc_values_supported:
+        description: OPTIONAL. JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT
+        type: string
+      userinfo_signing_alg_values_supported:
+        description: 'OPTIONAL. JSON array containing a list of the JWS signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT'
+        type: string
+      userinfo_encryption_alg_values_supported:
+        description: 'ROPTIONAL. JSON array containing a list of the JWE encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT'
+        type: string
+      userinfo_encryption_enc_values_supported:
+        description: 'OPTIONAL. JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT'
+        type: string
+      request_object_signing_alg_values_supported:
+        description: OPTIONAL. JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects
+        type: string
+      request_object_encryption_alg_values_supported:
+        description: OPTIONAL. JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects
+        type: string
+      request_object_encryption_enc_values_supported:
+        description: OPTIONAL. JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects
+        type: string
+      token_endpoint_auth_methods_supported:
+        description: OPTIONAL. JSON array containing a list of Client Authentication methods supported by this Token Endpoint
+        type: string
+      token_endpoint_auth_signing_alg_values_supported:
+        description: OPTIONAL. JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT
+        type: string
+      display_values_supported:
+        description: OPTIONAL. JSON array containing a list of the display parameter values that the OpenID Provider supports
+        type: string
+      claim_types_supported:
+        description: OPTIONAL. JSON array containing a list of the Claim Types that the OpenID Provider supports
+        type: string
+      claims_supported:
+        description: RECOMMENDED. JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for
+        type: string
+      service_documentation:
+        description: OPTIONAL. URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider
+        type: string
+      claims_locales_supported:
+        description: 'OPTIONAL. Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values'
+        type: string
+      ui_locales_supported:
+        description: 'OPTIONAL. Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values'
+        type: string
+      claims_parameter_supported:
+        description: 'OPTIONAL. Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false'
+        type: boolean
+      request_parameter_supported:
+        description: 'OPTIONAL. Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false'
+        type: boolean
+      request_uri_parameter_supported:
+        description: 'OPTIONAL. Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is true'
+        type: boolean
+      require_request_uri_registration:
+        description: OPTIONAL. Boolean value specifying whether the OP requires any request_uri values used to be pre-registered using the request_uris registration parameter
+        type: boolean
+      op_policy_uri:
+        description: OPTIONAL. URL that the OpenID Provider provides to the person registering the Client to read about the OP's requirements on how the Relying Party can use the data provided by the OP
+        type: string
+      op_tos_uri:
+        description: OPTIONAL. URL that the OpenID Provider provides to the person registering the Client to read about OpenID Provider's terms of service
+        type: boolean
+  UserInfoResponse:
+    type: object
+    properties:
+      sub:
+        description: Subject - Identifier for the End-User at the Issuer
+        type: string
+      name:
+        description: 'End-User''s full name in displayable form including all name parts, possibly including titles and suffixes, ordered according to the End-User''s locale and preferences'
+        type: string
+      given_name:
+        description: Given name(s) or first name(s) of the End-User
+        type: string
+      family_name:
+        description: Surname(s) or last name(s) of the End-User
+        type: string
+      middle_name:
+        description: Middle name(s) of the End-User
+        type: string
+      nickname:
+        description: Casual name of the End-User that may or may not be the same as the given_name
+        type: string
+      preferred_username:
+        description: 'Shorthand name by which the End-User wishes to be referred to at the RP, such as janedoe or j.doe'
+        type: string
+      profile:
+        description: URL of the End-User's profile page
+        type: string
+      picture:
+        description: URL of the End-User's profile picture
+        type: string
+      website:
+        description: URL of the End-User's Web page or blog
+        type: string
+      email:
+        description: End-User's preferred e-mail address
+        type: string
+      email_verified:
+        description: User at the time the verification was performed
+        type: boolean
+      gender:
+        description: End-User's gender
+        type: string
+      birthdate:
+        description: 'End-User''s birthday, represented as an ISO 8601:2004 [ISO8601‑2004] YYYY-MM-DD format'
+        type: string
+      zoneinfo:
+        description: 'String from zoneinfo [zoneinfo] time zone database representing the End-User''s time zone'
+        type: string
+      locale:
+        description: 'End-User''s locale, represented as a BCP47 [RFC5646] language tag'
+        type: string
+      phone_number:
+        description: End-User's preferred telephone number
+        type: string
+      phone_number_verified:
+        description: User at the time the verification was performed
+        type: boolean
+      address:
+        description: End-User's preferred postal address
+        type: string
+      updated_at:
+        description: Time the End-User's information was last updated
+        type: integer
+  JWKSetResponse:
+    type: object
+    properties:
+      keys:
+        description: The value of the "keys" parameter is an array of JWK values
+        type: array
+        items:
+          type: JWKResponse
+  JWKResponse:
+    type: object
+    properties:
+      kty:
+        description: 'The "kty" (key type) parameter identifies the cryptographic algorithm family used with the key, such as "RSA" or "EC"'
+        type: string
+      use:
+        description: The "use" (public key use) parameter identifies the intended use of the public key
+        type: string
+      key_ops:
+        description: The "key_ops" (key operations) parameter identifies the operation(s) for which the key is intended to be used
+        type: string
+      alg:
+        description: The "alg" (algorithm) parameter identifies the algorithm intended for use with the key
+        type: string
+      kid:
+        description: The "kid" (key ID) parameter is used to match a specific key
+        type: string
+      x5u:
+        description: 'The "x5u" (X.509 URL) parameter is a URI [RFC3986] that refers to a resource for an X.509 public key certificate or certificate chain [RFC5280]'
+        type: string
+      x5c:
+        description: 'The "x5c" (X.509 certificate chain) parameter contains a chain of one or more PKIX certificates [RFC5280]'
+        type: string
+      x5t:
+        description: 'The "x5t" (X.509 certificate SHA-1 thumbprint) parameter is a base64url-encoded SHA-1 thumbprint (a.k.a. digest) of the DER encoding of an X.509 certificate [RFC5280]'
+        type: string
+      'x5t#S256':
+        description: 'The "x5t#S256" (X.509 certificate SHA-256 thumbprint) parameter is a base64url-encoded SHA-256 thumbprint (a.k.a. digest) of the DER encoding of an X.509 certificate [RFC5280]'
+        type: string
+  ClientRegistrationRequest:
+    type: object
+    properties:
+      redirect_uris:
+        description: REQUIRED. Array of Redirection URI values used by the Client. One of these registered Redirection URI values MUST exactly match the redirect_uri parameter value used in each Authorization Request
+        type: array
+        items:
+          type: string
+      response_types:
+        description: 'JSON array containing a list of the OAuth 2.0 response_type values that the Client is declaring that it will restrict itself to using. If omitted, the default is that the Client will use only the code Response Type.'
+        type: array
+        items:
+          type: string
+        required: false
+      grant_types:
+        description: 'JSON array containing a list of the OAuth 2.0 Grant Types that the Client is declaring that it will restrict itself to using. Values used by OpenID Connect are authorization_code, implicit and refresh_token'
+        type: array
+        items:
+          type: string
+        required: false
+      application_type:
+        description: 'Kind of the application. The default, if omitted, is web. The defined values are native or web.'
+        type: string
+        required: false
+      contacts:
+        description: Array of e-mail addresses of people responsible for this Client. This might be used by some providers to enable a Web user interface to modify the Client information.
+        type: array
+        items:
+          type: string
+        required: false
+      client_name:
+        description: Name of the Client to be presented to the End-User.
+        type: string
+        required: false
+      logo_uri:
+        description: URL that references a logo for the Client application.
+        type: string
+        required: false
+      client_uri:
+        description: URL of the home page of the Client. The value of this field MUST point to a valid Web page.
+        type: string
+        required: false
+      policy_uri:
+        description: URL that the Relying Party Client provides to the End-User to read about the how the profile data will be used.
+        type: string
+        required: false
+      tos_uri:
+        description: URL that the Relying Party Client provides to the End-User to read about the Relying Party's terms of service.
+        type: string
+        required: false
+      jwks_uri:
+        description: 'URL for the Client''s JSON Web Key Set [JWK] document.'
+        type: string
+        required: false
+      jwks:
+        description: 'Client''s JSON Web Key Set [JWK] document, passed by value. The semantics of the jwks parameter are the same as the jwks_uri parameter, other than that the JWK Set is passed by value, rather than by reference.'
+        type: JWKSetResponse
+        required: false
+      sector_identifier_uri:
+        description: URL using the https scheme to be used in calculating Pseudonymous Identifiers by the OP. The URL references a file with a single JSON array of redirect_uri values.
+        type: string
+        required: false
+      subject_type:
+        description: subject_type requested for responses to this Client. The subject_types_supported Discovery parameter contains a list of the supported subject_type values for this server. Valid types include pairwise and public.
+        type: string
+        required: false
+      id_token_signed_response_alg:
+        description: 'JWS alg algorithm [JWA] REQUIRED for signing the ID Token issued to this Client. The default, if omitted, is RS256. The public key for validating the signature is provided by retrieving the JWK Set referenced by the jwks_uri element from OpenID Connect Discovery 1.0 [OpenID.Discovery].'
+        type: string
+        required: false
+      id_token_encrypted_response_alg:
+        description: 'JWE alg algorithm [JWA] REQUIRED for encrypting the ID Token issued to this Client. If this is requested, the response will be signed then encrypted, with the result being a Nested JWT, as defined in [JWT]. The default, if omitted, is that no encryption is performed.'
+        type: string
+        required: false
+      id_token_encrypted_response_enc:
+        description: 'JWE enc algorithm [JWA] REQUIRED for encrypting the ID Token issued to this Client. If id_token_encrypted_response_alg is specified, the default for this value is A128CBC-HS256. When id_token_encrypted_response_enc is included, id_token_encrypted_response_alg MUST also be provided.'
+        type: string
+        required: false
+      userinfo_signed_response_alg:
+        description: 'WS alg algorithm [JWA] REQUIRED for signing UserInfo Responses. If this is specified, the response will be JWT [JWT] serialized, and signed using JWS. The default, if omitted, is for the UserInfo Response to return the Claims as a UTF-8 encoded JSON object using the application/json content-type.'
+        type: string
+        required: false
+      userinfo_encrypted_response_alg:
+        description: 'JWE [JWE] alg algorithm [JWA] REQUIRED for encrypting UserInfo Responses. If both signing and encryption are requested, the response will be signed then encrypted, with the result being a Nested JWT, as defined in [JWT]. The default, if omitted, is that no encryption is performed.'
+        type: string
+        required: false
+      userinfo_encrypted_response_enc:
+        description: 'JWE enc algorithm [JWA] REQUIRED for encrypting UserInfo Responses. If userinfo_encrypted_response_alg is specified, the default for this value is A128CBC-HS256. When userinfo_encrypted_response_enc is included, userinfo_encrypted_response_alg MUST also be provided.'
+        type: string
+        required: false
+      request_object_signing_alg:
+        description: 'JWS [JWS] alg algorithm [JWA] that MUST be used for signing Request Objects sent to the OP. All Request Objects from this Client MUST be rejected, if not signed with this algorithm. Request Objects are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. This algorithm MUST be used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support RS256. The value none MAY be used. The default, if omitted, is that any algorithm supported by the OP and the RP MAY be used.'
+        type: string
+        required: false
+      request_object_encryption_alg:
+        description: 'JWE [JWE] alg algorithm [JWA] the RP is declaring that it may use for encrypting Request Objects sent to the OP. This parameter SHOULD be included when symmetric encryption will be used, since this signals to the OP that a client_secret value needs to be returned from which the symmetric key will be derived, that might not otherwise be returned. The RP MAY still use other supported encryption algorithms or send unencrypted Request Objects, even when this parameter is present. If both signing and encryption are requested, the Request Object will be signed then encrypted, with the result being a Nested JWT, as defined in [JWT]. The default, if omitted, is that the RP is not declaring whether it might encrypt any Request Objects.'
+        type: string
+        required: false
+      request_object_encryption_enc:
+        description: 'JWE enc algorithm [JWA] the RP is declaring that it may use for encrypting Request Objects sent to the OP. If request_object_encryption_alg is specified, the default for this value is A128CBC-HS256. When request_object_encryption_enc is included, request_object_encryption_alg MUST also be provided.'
+        type: string
+        required: false
+      token_endpoint_auth_method:
+        description: 'Requested Client Authentication method for the Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, private_key_jwt, and none, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749].'
+        type: string
+        required: false
+      token_endpoint_auth_signing_alg:
+        description: 'JWS [JWS] alg algorithm [JWA] that MUST be used for signing the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. All Token Requests using these authentication methods from this Client MUST be rejected, if the JWT is not signed with this algorithm. Servers SHOULD support RS256. The value none MUST NOT be used. The default, if omitted, is that any algorithm supported by the OP and the RP MAY be used.'
+        type: string
+        required: false
+      default_max_age:
+        description: 'Default Maximum Authentication Age. Specifies that the End-User MUST be actively authenticated if the End-User was authenticated longer ago than the specified number of seconds. The max_age request parameter overrides this default value. If omitted, no default Maximum Authentication Age is specified.'
+        type: integer
+        required: false
+      require_auth_time:
+        description: Boolean value specifying whether the auth_time Claim in the ID Token is REQUIRED. It is REQUIRED when the value is true.
+        type: boolean
+        required: false
+      default_acr_values:
+        description: 'Default requested Authentication Context Class Reference values. Array of strings that specifies the default acr values that the OP is being requested to use for processing requests from this Client, with the values appearing in order of preference.'
+        type: array
+        items:
+          type: string
+        required: false
+      initiate_login_uri:
+        description: 'URI using the https scheme that a third party can use to initiate a login by the RP, as specified in Section 4 of OpenID Connect Core 1.0 [OpenID.Core].'
+        type: string
+        required: false
+      request_uris:
+        description: Array of request_uri values that are pre-registered by the RP for use at the OP.
+        type: array
+        items:
+          type: string
+        required: false
+      scope:
+        description: String containing a space-separated list of scope values
+        type: array
+        items:
+          type: string
+        required: false
+      software_id:
+        description: 'A unique identifier string (e.g., a Universally Unique Identifier (UUID)) assigned by the client developer or software publisher used by registration endpoints to identify the client software to be dynamically registered.'
+        type: string
+        required: false
+      software_version:
+        description: A version identifier string for the client software identified by "software_id".  The value of the "software_version" SHOULD change on any update to the client software identified by the same "software_id".
+        type: string
+        required: false
+      software_statement:
+        description: A software statement containing client metadata values about the client software as claims.  This is a string value containing the entire signed JWT.
+        type: string
+        required: false
+  ClientRegistrationResponse:
+    type: ClientRegistrationRequest
+    properties:
+      client_id:
+        description: REQUIRED. Unique Client Identifier. It MUST NOT be currently valid for any other registered Client.
+        type: string
+      client_secret:
+        description: Client Secret. The same Client Secret value MUST NOT be assigned to multiple Clients. This value is used by Confidential Clients to authenticate to the Token Endpoint.
+        type: string
+        required: false
+      registration_access_token:
+        description: Registration Access Token that can be used at the Client Configuration Endpoint to perform subsequent operations upon the Client registration.
+        type: string
+        required: false
+      registration_client_uri:
+        description: Location of the Client Configuration Endpoint where the Registration Access Token can be used to perform subsequent operations upon the resulting Client registration. Implementations MUST either return both a Client Configuration Endpoint and a Registration Access Token or neither of them.
+        type: string
+        required: false
+      client_id_issued_at:
+        description: 'Time at which the Client Identifier was issued. Its value is a JSON number representing the number of seconds from 1970-01-01T0:0:0Z as measured in UTC until the date/time.'
+        type: string
+        required: false
+      client_secret_expires_at:
+        description: 'if client_secret is issued. Time at which the client_secret will expire or 0 if it will not expire. Its value is a JSON number representing the number of seconds from 1970-01-01T0:0:0Z as measured in UTC until the date/time.'
+        type: integer
+        format: int64
+        required: false
+        
+
+        
+        
+/.well-known:
+  /jwks.json:
+    get:
+      description: JWKS endpoint containing the public keys used by OpenID Connect Relying Party to verify any JWT issued by the authorization server.
+      responses:
+        '200':
+          description: A JSON object that represents a set of JWKs
+          body:
+            application/json:
+              type: JWKSetResponse
+      (oas-summary): Get JSON Web Key Set
+      (oas-tags):
+        - OpenID Connect
+  /openid-configuration:
+    get:
+      description: 'Discovery endpoint used by OpenID Connect Relying Party to discover the End-User''s OpenID Provider and obtain information needed to interact with it, including its OAuth 2.0 endpoint locations.'
+      responses:
+        '200':
+          description: The OpenID Provider Metadata values
+          body:
+            application/json:
+              type: OpenIDProviderMetadataResponse
+      (oas-summary): Get OpenID Provider configuration information
+      (oas-tags):
+        - OpenID Connect
+/register:
+  post:
+    description: The Dynamic Client Registration (dcr) Endpoint is an OAuth 2.0 Protected Resource through which a new Client registration can be requested.
+    responses:
+      '201':
+        description: Claims about the registred client
+        body:
+          application/json:
+            type: ClientRegistrationResponse
+      '400':
+        description: Invalid Request
+      '401':
+        description: Invalid Token
+      '403':
+        description: Registration forbidden
+    headers:
+      Authorization:
+        description: Bearer token obtained through client crendentials flow with as mandatory scope "dcr_admin". Token required unless open dynamic client registration is enabled.
+        required: false
+        type: string
+    body:
+      application/json:
+        type: ClientRegistrationRequest
+        (oas-body-name): request
+    (oas-summary): Register (create) a new client.
+    (oas-tags):
+      - OpenID Connect
+  '/{client_id}':
+    get:
+      description: See information about a registred client.
+      responses:
+        '200':
+          description: Claims about the registred client.
+          body:
+            application/json:
+              type: ClientRegistrationResponse
+        '400':
+          description: Invalid Request
+        '401':
+          description: Invalid Token
+        '403':
+          description: Access forbidden
+      headers:
+        Authorization:
+          description: Bearer token obtained on the register process through the registration_access_token property giving access only to one client matching the client_id path parameter. An admin token can be also obtained through the client crendentials flow with as mandatory scope "dcr_admin".
+          type: string
+      (oas-summary): Get a registred client.
+      (oas-tags):
+        - OpenID Connect
+    patch:
+      description: Update information about a registred client.
+      responses:
+        '200':
+          description: Claims about the updated client.
+          body:
+            application/json:
+              type: ClientRegistrationResponse
+        '400':
+          description: Invalid Request
+        '401':
+          description: Invalid Token
+        '403':
+          description: Access forbidden
+      headers:
+        Authorization:
+          description: Bearer token obtained on the register process through the registration_access_token property giving access only to one client matching the client_id path parameter. An admin token can be also obtained through the client crendentials flow with as mandatory scope "dcr_admin".
+          type: string
+      body:
+        application/json:
+          type: ClientRegistrationRequest
+          (oas-body-name): request
+      (oas-summary): Patch a registred client.
+      (oas-tags):
+        - OpenID Connect
+    delete:
+      description: Delete a registred client.
+      responses:
+        '204':
+          description: Client deleted
+          body:
+            application/json:
+              type: ClientRegistrationResponse
+        '400':
+          description: Invalid Request
+        '401':
+          description: Invalid Token
+        '403':
+          description: Access forbidden
+      headers:
+        Authorization:
+          description: Bearer token obtained on the register process through the registration_access_token property giving access only to one client matching the client_id path parameter. An admin token can be also obtained through the client crendentials flow with as mandatory scope "dcr_admin".
+          type: string
+      (oas-summary): Delete a registred client.
+      (oas-tags):
+        - OpenID Connect
+    uriParameters:
+      client_id:
+        description: ID of the client
+        type: string
+    /renew_secret:
+      post:
+        description: Renew the client secret of a registred client.
+        responses:
+          '200':
+            description: Claims about the updated client.
+            body:
+              application/json:
+                type: ClientRegistrationResponse
+          '400':
+            description: Invalid Request
+          '401':
+            description: Invalid Token
+          '403':
+            description: Access forbidden
+        headers:
+          Authorization:
+            description: Bearer token obtained on the register process through the registration_access_token property giving access only to one client matching the client_id path parameter. An admin token can be also obtained through the client crendentials flow with as mandatory scope "dcr_admin".
+            type: string
+        (oas-summary): Renew the client secret of a registred client.
+        (oas-tags):
+          - OpenID Connect
+/userinfo:
+  get:
+    description: The UserInfo Endpoint is an OAuth 2.0 Protected Resource that returns Claims about the authenticated End-User.
+    responses:
+      '200':
+        description: Claims about the authenticated End-User
+        body:
+          application/json:
+            type: UserInfoResponse
+      '400':
+        description: Invalid Request
+      '401':
+        description: Invalid Token
+    headers:
+      Authorization:
+        description: 'To obtain the requested Claims about the End-User, the Client makes a request to the UserInfo Endpoint using an Access Token obtained through OpenID Connect Authentication'
+        type: string
+    (oas-summary): Get claims about the authenticated End-User
+    (oas-tags):
+      - OpenID Connect
+  post:
+    description: The UserInfo Endpoint is an OAuth 2.0 Protected Resource that returns Claims about the authenticated End-User.
+    responses:
+      '200':
+        description: Claims about the authenticated End-User
+        body:
+          application/json:
+            type: UserInfoResponse
+      '400':
+        description: Invalid Request
+      '401':
+        description: Invalid Token
+    body:
+      application/x-www-form-urlencoded:
+        properties:
+          access_token:
+            description: 'To obtain the requested Claims about the End-User, the Client makes a request to the UserInfo Endpoint using an Access Token obtained through OpenID Connect Authentication'
+            type: string
+    (oas-summary): Get claims about the authenticated End-User
+    (oas-tags):
+      - OpenID Connect
+      
+/introspect:
+  post:
+    description: The UserInfo Endpoint is an OAuth 2.0 Protected Resource that returns Claims about the authenticated End-User.
+    responses:
+      '200':
+        description: Claims about the authenticated End-User
+        body:
+          application/json:
+            type: UserInfoResponse
+      '400':
+        description: Invalid Request
+      '401':
+        description: Invalid Token
+    body:
+      application/json:
+        properties:
+          token:
+            description: 'An access token, ID token, or refresh token.'
+            type: string
+          token_type_hint:
+            description: 'Indicates the type of token being passed. Valid values are access_token, id_token and refresh_token'
+            type: string
+            enum: ['access_token', 'id_token', 'refresh_token']
+
+/authorize:
+  get:
+    displayName: Get authorization location
+    description: Use this operation to authenticate using your salesforce credentials and obtain access token.
+    (amf-summary): Get authorization location.
+    (amf-tags):
+      - authorize
+    responses:
+      "302":
+        description: Found
+        headers:
+          Date:
+            description: The UTC date/time at which the request is made.
+            type: datetime
+          Content-Length:
+            description: Length of response content.
+            type: integer
+          Connection:
+            description: Requested connection type.
+            type: string
+          Public-Key-Pins-Report-Only:
+            description: Public key pin report.
+            type: string
+          Expect-CT:
+            description: Certificate Transparency.
+            type: string
+          Cache-Control:
+            description: Caching mechanism directive.
+            type: string
+          Set-Cookie:
+            description: Response cookie.
+            type: string
+          Expires:
+            description: Time after which the response is considered stale.
+            type: datetime
+          Location:
+            description: Redirect location to sign in and authorize.
+            type: string
+        body: {}
+      "401":
+        description: Unauthorized
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "405":
+        description: Method Not Allowed
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+    securedBy:
+      - ApiKeyAuth
+/redirect:
+  get:
+    displayName: Issued authorization code.
+    description: Once successful authentication is complete Salesforce redirects user to this operation.
+    (amf-summary): Issued authorization code.
+    (amf-tags):
+      - redirect
+    queryParameters:
+      state:
+        description: state
+        required: true
+        type: string
+      code:
+        description: encrypted authorisation code
+        required: true
+        type: string
+    body: {}
+    responses:
+      "200":
+        description: OK
+        body:
+          application/json:
+            displayName: Token
+            type: object
+            additionalProperties: false
+            properties:
+              token_type:
+                type: string
+                required: true
+              issued_at:
+                type: string
+                required: true
+              salesforce_id:
+                type: string
+                required: true
+              access_token:
+                type: string
+                required: true
+              refresh_token:
+                type: string
+                required: true
+              application_name:
+                type: string
+                required: true
+              scope:
+                type: string
+                required: true
+              expires_in:
+                type: string
+                required: true
+      "401":
+        description: Unauthorized
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "429":
+        description: Too Many Requests
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "500":
+        description: InternalServerError
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+  put:
+    displayName: Put authorization code.
+    description: Once successful authentication is complete Salesforce redirects user to this operation.
+    (amf-summary): Put authorization code.
+    (amf-tags):
+      - redirect
+    queryParameters:
+      state:
+        description: state
+        required: true
+        type: string
+      code:
+        description: encrypted authorisation code
+        required: true
+        type: string
+    body: {}
+    responses:
+      "200":
+        description: OK
+        body:
+          application/json:
+            displayName: Token
+            type: object
+            additionalProperties: false
+            properties:
+              token_type:
+                type: string
+                required: true
+              issued_at:
+                type: string
+                required: true
+              salesforce_id:
+                type: string
+                required: true
+              access_token:
+                type: string
+                required: true
+              refresh_token:
+                type: string
+                required: true
+              application_name:
+                type: string
+                required: true
+              scope:
+                type: string
+                required: true
+              expires_in:
+                type: string
+                required: true
+      "401":
+        description: Unauthorized
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "429":
+        description: Too Many Requests
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "500":
+        description: InternalServerError
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+  post:
+    displayName: Post authorization code.
+    description: Once successful authentication is complete Salesforce redirects user to this operation.
+    (amf-summary): Post authorization code.
+    (amf-tags):
+      - redirect
+    queryParameters:
+      state:
+        description: state
+        required: true
+        type: string
+      code:
+        description: encrypted authorisation code
+        required: true
+        type: string
+    body: {}
+    responses:
+      "200":
+        description: OK
+        body:
+          application/json:
+            displayName: Token
+            type: object
+            additionalProperties: false
+            properties:
+              token_type:
+                type: string
+                required: true
+              issued_at:
+                type: string
+                required: true
+              salesforce_id:
+                type: string
+                required: true
+              access_token:
+                type: string
+                required: true
+              refresh_token:
+                type: string
+                required: true
+              application_name:
+                type: string
+                required: true
+              scope:
+                type: string
+                required: true
+              expires_in:
+                type: string
+                required: true
+      "401":
+        description: Unauthorized
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "429":
+        description: Too Many Requests
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "500":
+        description: InternalServerError
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+  delete:
+    displayName: Delete authorization code.
+    description: Once successful authentication is complete Salesforce redirects user to this operation.
+    (amf-summary): Delete authorization code.
+    (amf-tags):
+      - redirect
+    queryParameters:
+      state:
+        description: state
+        required: true
+        type: string
+      code:
+        description: encrypted authorisation code
+        required: true
+        type: string
+    body: {}
+    responses:
+      "200":
+        description: OK
+        body:
+          application/json:
+            displayName: Token
+            type: object
+            additionalProperties: false
+            properties:
+              token_type:
+                type: string
+                required: true
+              issued_at:
+                type: string
+                required: true
+              salesforce_id:
+                type: string
+                required: true
+              access_token:
+                type: string
+                required: true
+              refresh_token:
+                type: string
+                required: true
+              application_name:
+                type: string
+                required: true
+              scope:
+                type: string
+                required: true
+              expires_in:
+                type: string
+                required: true
+      "401":
+        description: Unauthorized
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "429":
+        description: Too Many Requests
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "500":
+        description: InternalServerError
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+/token:
+  post:
+    displayName: Post refresh token and renew stale access token.
+    description: Use this operation to refresh an expired access token.
+    (amf-summary): Post refresh token and refresh stale access token.
+    (amf-tags):
+      - token
+    body:
+      application/x-www-form-urlencoded:
+        additionalProperties: true
+        properties:
+          refresh_token:
+            description: refresh token
+            type: string
+            required: false
+    responses:
+      "200":
+        description: OK
+        body:
+          application/json:
+            displayName: refreshed token
+            type: object
+            additionalProperties: false
+            properties:
+              token_type:
+                type: string
+                required: false
+              issued_at:
+                type: string
+                required: false
+              salesforce_id:
+                type: string
+                required: false
+              access_token:
+                type: string
+                required: false
+              application_name:
+                type: string
+                required: false
+              scope:
+                type: string
+                required: false
+              expires_in:
+                type: string
+                required: false
+      "401":
+        description: Unauthorized
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "429":
+        description: Too Many Requests
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+      "500":
+        description: InternalServerError
+        body:
+          application/json:
+            additionalProperties: true
+            properties:
+              code:
+                type: number
+                format: int32
+                required: true
+              message:
+                type: string
+                required: true
+    securedBy:
+      - ApiKeyAuth
+
+/healthcheck:
+  get:
+    responses: 
+      200:
+        body: 
+          application/json:
+
