@@ -264,7 +264,7 @@
 				},
 				"method": "GET",
 				"header": [],
-				"url": { 
+				"url": {
 					"raw": "http://test-api-km.au-s1.cloudhub.io/api/test",
 					"protocol": "http",
 					"host": [
